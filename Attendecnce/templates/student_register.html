@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Student Registration{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Student Registration</h2>
+    <p>Create your account and register with face capture.</p>
+    
+    <form method="POST" action="{{ url_for('student_register') }}">
+        <div class="form-group">
+            <label for="username">Username *</label>
+            <input type="text" id="username" name="username" required placeholder="Choose a username">
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" required placeholder="Choose a password">
+        </div>
+        
+        <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group">
+            <label for="roll_number">Roll Number *</label>
+            <input type="text" id="roll_number" name="roll_number" required placeholder="Enter your roll number">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter email address">
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter phone number">
+        </div>
+        
+        <div class="alert alert-info" style="margin-bottom: 20px;">
+            <strong>📸 Face Capture Instructions:</strong><br>
+            • Click "Register" button below<br>
+            • Allow camera access when prompted<br>
+            • Position your face clearly in the camera frame<br>
+            • Press SPACE bar to capture your face<br>
+            • Press ESC to cancel<br>
+            • Ensure good lighting and face the camera directly
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Register (Will Open Camera)</button>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary" style="margin-left: 10px;">Back to Login</a>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Registration Process</h3>
+    <ol style="line-height: 2; color: #555;">
+        <li>Fill in all required information</li>
+        <li>Choose a unique username and password</li>
+        <li>Click "Register" button</li>
+        <li>Camera will open automatically</li>
+        <li>Position face in the frame</li>
+        <li>Press SPACE to capture face image</li>
+        <li>System will encode and store face data</li>
+        <li>Registration complete - you can login!</li>
+    </ol>
+</div>
+{% endblock %}

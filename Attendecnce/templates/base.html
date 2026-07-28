@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Face Detection Attendance System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Face Detection Attendance System</h1>
+            <p>Automated Attendance Management with Face Recognition</p>
+            {% if session.get('username') %}
+            <p style="margin-top: 10px;">Welcome, <strong>{{ session.username }}</strong> ({{ session.role }}) | 
+                <a href="{{ url_for('logout') }}" style="color: white; text-decoration: underline;">Logout</a>
+            </p>
+            {% endif %}
+        </header>
+        
+        <nav>
+            <ul>
+                {% if not session.get('user_id') %}
+                    <li><a href="{{ url_for('index') }}" {% if request.endpoint == 'index' %}class="active"{% endif %}>Home</a></li>
+                    <li><a href="{{ url_for('login') }}" {% if request.endpoint == 'login' %}class="active"{% endif %}>Login</a></li>
+                    <li><a href="{{ url_for('student_register') }}" {% if request.endpoint == 'student_register' %}class="active"{% endif %}>Student Registration</a></li>
+                {% elif session.get('role') == 'admin' %}
+                    <li><a href="{{ url_for('admin_dashboard') }}" {% if request.endpoint == 'admin_dashboard' %}class="active"{% endif %}>Dashboard</a></li>
+                    <li><a href="{{ url_for('register') }}" {% if request.endpoint == 'register' %}class="active"{% endif %}>Register Student</a></li>
+                    <li><a href="{{ url_for('students') }}" {% if request.endpoint == 'students' %}class="active"{% endif %}>View Students</a></li>
+                    <li><a href="{{ url_for('attendance') }}" {% if request.endpoint == 'attendance' %}class="active"{% endif %}>Mark Attendance</a></li>
+                    <li><a href="{{ url_for('reports') }}" {% if request.endpoint == 'reports' %}class="active"{% endif %}>Reports</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('student_dashboard') }}" {% if request.endpoint == 'student_dashboard' %}class="active"{% endif %}>Dashboard</a></li>
+                    <li><a href="{{ url_for('attendance') }}" {% if request.endpoint == 'attendance' %}class="active"{% endif %}>Mark Attendance</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        
+        <div class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Face Detection Attendance System. All rights reserved.</p>
+    </footer>
+</body>
+</html>

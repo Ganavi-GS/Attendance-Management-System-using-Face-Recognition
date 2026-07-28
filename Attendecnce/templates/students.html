@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Registered Students{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Registered Students</h2>
+    <p>Total Students: <strong>{{ students|length }}</strong></p>
+    
+    <a href="{{ url_for('register') }}" class="btn btn-primary" style="margin-bottom: 20px;">
+        ➕ Register New Student
+    </a>
+    
+    <a href="{{ url_for('generate_student_list') }}" class="btn btn-success" style="margin-bottom: 20px; margin-left: 10px;">
+        📥 Download Student List (Excel)
+    </a>
+    
+    {% if students %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Registration Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.roll_number }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.email or 'N/A' }}</td>
+                    <td>{{ student.phone or 'N/A' }}</td>
+                    <td>{{ student.registration_date.strftime('%Y-%m-%d %H:%M') if student.registration_date else 'N/A' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('delete_student', student_id=student.id) }}" 
+                              style="display: inline;"
+                              onsubmit="return confirm('Are you sure you want to delete this student?');">
+                            <button type="submit" class="btn btn-danger" style="padding: 8px 15px; font-size: 0.9em;">
+                                🗑️ Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            <strong>No students registered yet.</strong><br>
+            Click "Register New Student" to add your first student.
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>Student Management</h3>
+    <p style="color: #555; line-height: 1.8;">
+        This page displays all registered students in the system. Each student has a unique roll number 
+        and face encoding stored in the database. You can:
+    </p>
+    <ul style="color: #555; line-height: 2;">
+        <li>View all registered student details</li>
+        <li>Download complete student list as Excel file</li>
+        <li>Delete students from the system (this will also remove their attendance records)</li>
+        <li>Register new students using the "Register New Student" button</li>
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Mark Attendance{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Mark Attendance</h2>
+    <p>Use face recognition to automatically mark attendance for students.</p>
+    
+    <form method="POST" action="{{ url_for('attendance') }}">
+        <div class="alert alert-info" style="margin-bottom: 20px;">
+            <strong>📸 Attendance Instructions:</strong><br>
+            • Click "Start Face Recognition" button below<br>
+            • Camera will open automatically<br>
+            • Position your face clearly in front of the camera<br>
+            • System will automatically recognize and match your face<br>
+            • If match found, attendance will be marked<br>
+            • If no match found, "No Match" error will be displayed<br>
+            • Press ESC to cancel at any time
+        </div>
+        
+        <button type="submit" class="btn btn-success" style="font-size: 1.1em; padding: 15px 40px;">
+            🎥 Start Face Recognition
+        </button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Today's Attendance</h2>
+    <p>Date: <strong>{{ attendance_records[0].date if attendance_records else 'Today' }}</strong></p>
+    
+    {% if attendance_records %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in attendance_records %}
+                <tr>
+                    <td>{{ record.roll_number }}</td>
+                    <td>{{ record.name }}</td>
+                    <td>
+                        {% if record.status %}
+                            <span class="status-present">✅ {{ record.status }}</span>
+                        {% else %}
+                            <span class="status-absent">❌ Absent</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ record.time if record.time else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div style="margin-top: 20px;">
+            <p><strong>Summary:</strong></p>
+            <p>Total Students: {{ attendance_records|length }}</p>
+            <p style="color: #28a745;">
+                Present: {{ attendance_records|selectattr('status')|list|length }}
+            </p>
+            <p style="color: #dc3545;">
+                Absent: {{ attendance_records|length - attendance_records|selectattr('status')|list|length }}
+            </p>
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            <strong>No attendance records found.</strong><br>
+            Either no students are registered or no attendance has been marked today.
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>How Attendance Works</h3>
+    <ol style="line-height: 2; color: #555;">
+        <li><strong>Click Start:</strong> Click the "Start Face Recognition" button</li>
+        <li><strong>Camera Opens:</strong> System activates your webcam</li>
+        <li><strong>Face Detection:</strong> System detects faces in the camera frame</li>
+        <li><strong>Face Matching:</strong> Compares detected face with registered students</li>
+        <li><strong>Match Found:</strong> If matched, attendance is marked as "Present"</li>
+        <li><strong>No Match:</strong> If not matched, error message is displayed</li>
+        <li><strong>One per Day:</strong> Each student can mark attendance once per day</li>
+    </ol>
+</div>
+
+<div class="card">
+    <h3>Important Notes</h3>
+    <ul style="line-height: 2; color: #555;">
+        <li>Ensure good lighting conditions for better recognition</li>
+        <li>Face the camera directly and remove any obstructions</li>
+        <li>Only registered students can mark attendance</li>
+        <li>Attendance is marked only once per day per student</li>
+        <li>If face is not recognized, you will see "No Match" error</li>
+        <li>Contact administrator if you face persistent recognition issues</li>
+    </ul>
+</div>
+{% endblock %}

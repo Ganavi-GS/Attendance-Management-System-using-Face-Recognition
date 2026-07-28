@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Face Detection Attendance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Admin Dashboard</h1>
+            <p>Face Detection Attendance System</p>
+            <p style="margin-top: 10px;">Welcome, <strong>{{ session.username }}</strong> | 
+                <a href="{{ url_for('logout') }}" style="color: white; text-decoration: underline;">Logout</a>
+            </p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('admin_dashboard') }}" class="active">Dashboard</a></li>
+                <li><a href="{{ url_for('register') }}">Register Student</a></li>
+                <li><a href="{{ url_for('students') }}">View Students</a></li>
+                <li><a href="{{ url_for('attendance') }}">Mark Attendance</a></li>
+                <li><a href="{{ url_for('reports') }}">Reports</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <div class="card">
+                <h2>Overview</h2>
+                <p>Quick statistics and system overview</p>
+            </div>
+            
+            <div class="home-cards">
+                <div class="home-card">
+                    <div class="icon" style="font-size: 4em;">👥</div>
+                    <h3>Total Students</h3>
+                    <p style="font-size: 2.5em; font-weight: bold; color: #667eea; margin: 10px 0;">{{ total_students }}</p>
+                    <a href="{{ url_for('students') }}" class="btn btn-primary">View All</a>
+                </div>
+                
+                <div class="home-card">
+                    <div class="icon" style="font-size: 4em;">✅</div>
+                    <h3>Present Today</h3>
+                    <p style="font-size: 2.5em; font-weight: bold; color: #28a745; margin: 10px 0;">{{ present_today }}</p>
+                    <a href="{{ url_for('attendance') }}" class="btn btn-success">Mark Attendance</a>
+                </div>
+                
+                <div class="home-card">
+                    <div class="icon" style="font-size: 4em;">❌</div>
+                    <h3>Absent Today</h3>
+                    <p style="font-size: 2.5em; font-weight: bold; color: #dc3545; margin: 10px 0;">{{ absent_today }}</p>
+                    <a href="{{ url_for('reports') }}" class="btn btn-info">View Reports</a>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 30px;">
+                <h3>Quick Actions</h3>
+                <div class="grid">
+                    <div>
+                        <h4>👤 Register New Student</h4>
+                        <p>Add new students with face capture</p>
+                        <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
+                    </div>
+                    <div>
+                        <h4>📊 Generate Reports</h4>
+                        <p>Download attendance reports in Excel</p>
+                        <a href="{{ url_for('reports') }}" class="btn btn-info">Reports</a>
+                    </div>
+                    <div>
+                        <h4>✅ Mark Attendance</h4>
+                        <p>Use face recognition to mark attendance</p>
+                        <a href="{{ url_for('attendance') }}" class="btn btn-success">Mark</a>
+                    </div>
+                    <div>
+                        <h4>👥 Manage Students</h4>
+                        <p>View and manage all students</p>
+                        <a href="{{ url_for('students') }}" class="btn btn-secondary">Manage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Face Detection Attendance System. All rights reserved.</p>
+    </footer>
+</body>
+</html>

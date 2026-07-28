@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance Reports{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Attendance Reports</h2>
+    <p>Generate and download attendance reports in Excel format.</p>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <h3>📅 Daily Report</h3>
+        <p>Generate attendance report for a specific date.</p>
+        
+        <form method="POST" action="{{ url_for('generate_daily_report') }}">
+            <div class="form-group">
+                <label for="date">Select Date</label>
+                <input type="date" id="date" name="date" value="{{ current_date }}" required>
+            </div>
+            
+            <button type="submit" class="btn btn-success">
+                📥 Download Daily Report
+            </button>
+        </form>
+    </div>
+    
+    <div class="card">
+        <h3>📊 Date Range Report</h3>
+        <p>Generate attendance report for a date range.</p>
+        
+        <form method="POST" action="{{ url_for('generate_range_report') }}">
+            <div class="form-group">
+                <label for="start_date">Start Date</label>
+                <input type="date" id="start_date" name="start_date" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="end_date">End Date</label>
+                <input type="date" id="end_date" name="end_date" required>
+            </div>
+            
+            <button type="submit" class="btn btn-info">
+                📥 Download Range Report
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Today's Attendance Overview</h2>
+    <p>Date: <strong>{{ current_date }}</strong></p>
+    
+    {% if attendance_records %}
+        <div style="margin-bottom: 20px;">
+            <p><strong>Summary:</strong></p>
+            <p>Total Students: {{ attendance_records|length }}</p>
+            <p style="color: #28a745; font-size: 1.2em;">
+                ✅ Present: {{ attendance_records|selectattr('status')|list|length }}
+            </p>
+            <p style="color: #dc3545; font-size: 1.2em;">
+                ❌ Absent: {{ attendance_records|length - attendance_records|selectattr('status')|list|length }}
+            </p>
+            <p style="color: #17a2b8; font-size: 1.2em;">
+                📊 Attendance Percentage: 
+                {% if attendance_records|length > 0 %}
+                    {{ ((attendance_records|selectattr('status')|list|length / attendance_records|length) * 100)|round(1) }}%
+                {% else %}
+                    0%
+                {% endif %}
+            </p>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in attendance_records %}
+                <tr>
+                    <td>{{ record.roll_number }}</td>
+                    <td>{{ record.name }}</td>
+                    <td>
+                        {% if record.status %}
+                            <span class="status-present">✅ {{ record.status }}</span>
+                        {% else %}
+                            <span class="status-absent">❌ Absent</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ record.time if record.time else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            <strong>No attendance records for today.</strong><br>
+            Start marking attendance to see records here.
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>Report Features</h3>
+    <ul style="line-height: 2; color: #555;">
+        <li><strong>Daily Report:</strong> Get attendance report for any specific date</li>
+        <li><strong>Date Range Report:</strong> Get consolidated attendance for multiple days</li>
+        <li><strong>Excel Format:</strong> All reports are generated in Excel (.xlsx) format</li>
+        <li><strong>Color Coded:</strong> Present/Absent status is color-coded for easy viewing</li>
+        <li><strong>Detailed Information:</strong> Includes roll number, name, date, time, and status</li>
+        <li><strong>Automatic Storage:</strong> Reports are saved in the 'attendance_reports' folder</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h3>Using Excel Reports</h3>
+    <p style="color: #555; line-height: 1.8;">
+        The generated Excel files contain:
+    </p>
+    <ul style="color: #555; line-height: 2;">
+        <li>Student Roll Number</li>
+        <li>Student Name</li>
+        <li>Attendance Date</li>
+        <li>Time of Attendance</li>
+        <li>Status (Present/Absent)</li>
+    </ul>
+    <p style="color: #555; line-height: 1.8; margin-top: 15px;">
+        You can open these files in Microsoft Excel, Google Sheets, or any spreadsheet application.
+        The reports are formatted with color-coding: green for present, red for absent.
+    </p>
+</div>
+{% endblock %}

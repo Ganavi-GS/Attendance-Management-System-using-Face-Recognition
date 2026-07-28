@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Face Detection Attendance System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Welcome to Face Detection Attendance System</h2>
+    <p>An automated attendance management system using facial recognition technology.</p>
+    {% if not logged_in %}
+    <p style="margin-top: 15px;">
+        <a href="{{ url_for('login') }}" class="btn btn-primary" style="margin-right: 10px;">🔐 Login</a>
+        <a href="{{ url_for('student_register') }}" class="btn btn-success">➕ Register as Student</a>
+    </p>
+    {% endif %}
+</div>
+
+<div class="home-cards">
+    <div class="home-card">
+        <div class="icon">👤</div>
+        <h3>Register Student</h3>
+        <p>Register new students with face capture and store their information securely.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary">Register Now</a>
+    </div>
+    
+    <div class="home-card">
+        <div class="icon">👥</div>
+        <h3>View Students</h3>
+        <p>View all registered students and manage their records easily.</p>
+        <a href="{{ url_for('students') }}" class="btn btn-primary">View Students</a>
+    </div>
+    
+    <div class="home-card">
+        <div class="icon">✅</div>
+        <h3>Mark Attendance</h3>
+        <p>Automatically mark attendance using face recognition technology.</p>
+        <a href="{{ url_for('attendance') }}" class="btn btn-success">Mark Attendance</a>
+    </div>
+    
+    <div class="home-card">
+        <div class="icon">📊</div>
+        <h3>Reports</h3>
+        <p>Generate and download daily attendance reports in Excel format.</p>
+        <a href="{{ url_for('reports') }}" class="btn btn-info">View Reports</a>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 30px;">
+    <h3>How It Works</h3>
+    <ol style="line-height: 2; color: #555; padding-left: 20px;">
+        <li><strong>Register Students:</strong> Capture student's face and store details in the database</li>
+        <li><strong>Mark Attendance:</strong> Student stands in front of camera for automatic recognition</li>
+        <li><strong>Automatic Matching:</strong> System matches face with registered students</li>
+        <li><strong>Record Attendance:</strong> If match found, attendance is marked automatically</li>
+        <li><strong>Error Handling:</strong> If no match found, displays "No Match" error</li>
+        <li><strong>Generate Reports:</strong> Download daily attendance in Excel format</li>
+    </ol>
+</div>
+
+<div class="card">
+    <h3>Features</h3>
+    <div class="grid">
+        <div>
+            <h4>🎯 Accurate Recognition</h4>
+            <p>Advanced face recognition algorithm for accurate identification</p>
+        </div>
+        <div>
+            <h4>⚡ Real-time Processing</h4>
+            <p>Instant attendance marking with live camera feed</p>
+        </div>
+        <div>
+            <h4>📁 Database Storage</h4>
+            <p>Secure MySQL database for storing student and attendance data</p>
+        </div>
+        <div>
+            <h4>📑 Excel Reports</h4>
+            <p>Daily attendance reports exported to Excel format</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

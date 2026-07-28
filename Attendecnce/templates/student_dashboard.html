@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Face Detection Attendance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Student Dashboard</h1>
+            <p>Face Detection Attendance System</p>
+            <p style="margin-top: 10px;">Welcome, <strong>{{ session.username }}</strong> | 
+                <a href="{{ url_for('logout') }}" style="color: white; text-decoration: underline;">Logout</a>
+            </p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('student_dashboard') }}" class="active">Dashboard</a></li>
+                <li><a href="{{ url_for('attendance') }}">Mark Attendance</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <div class="card">
+                <h2>Welcome Student!</h2>
+                <p>Use the options below to mark your attendance.</p>
+            </div>
+            
+            <div class="home-cards">
+                <div class="home-card">
+                    <div class="icon" style="font-size: 4em;">✅</div>
+                    <h3>Mark Attendance</h3>
+                    <p>Use face recognition to mark your attendance automatically.</p>
+                    <a href="{{ url_for('attendance') }}" class="btn btn-success" style="font-size: 1.1em; padding: 15px 30px;">
+                        🎥 Start Face Recognition
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>How to Mark Attendance</h3>
+                <ol style="line-height: 2; color: #555;">
+                    <li><strong>Click "Mark Attendance"</strong> from the menu above</li>
+                    <li><strong>Click "Start Face Recognition"</strong> button</li>
+                    <li><strong>Camera will open</strong> - position your face clearly</li>
+                    <li><strong>System recognizes</strong> your face automatically</li>
+                    <li><strong>Attendance marked!</strong> You'll see a success message</li>
+                </ol>
+            </div>
+            
+            <div class="card">
+                <h3>Important Notes</h3>
+                <ul style="line-height: 2; color: #555;">
+                    <li>✅ You can mark attendance <strong>once per day</strong></li>
+                    <li>💡 Ensure <strong>good lighting</strong> for better recognition</li>
+                    <li>👤 <strong>Face the camera</strong> directly</li>
+                    <li>🚫 Remove <strong>glasses or masks</strong> if face is not recognized</li>
+                    <li>⏰ Mark attendance during <strong>class hours</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Face Detection Attendance System. All rights reserved.</p>
+    </footer>
+</body>
+</html>
